@@ -1,0 +1,24 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2019-12-04T20:31:08Z",
+  "id": "extract-gift",
+  "duration": 21,
+  "title": "Estrai un regalo",
+  "authors": "Fabrizio Cacicia",
+  "summary": "In questo codelab implementerai la parte necessaria all'estraizione del regalo per l'evento Flutter Interact organizatto dal GDG Cloud ROma",
+  "source": "1cHgeOap4deaptXDeKNp3DrlSGQpiLs9uzArtK7JU-nM/edit#",
+  "theme": "flutter",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "Flutter"
+  ],
+  "tags": [
+    "flutter"
+  ],
+  "url": "extract-gift"
+}

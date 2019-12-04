@@ -1,0 +1,595 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Estrai un regalo</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/codelab-elements/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="extract-gift"
+                  title="Estrai un regalo"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Introduzione" duration="0">
+        <p class="image-container"><img style="width: 378.38px" src="img/7ce4fc071c263cd6.png"></p>
+<p><strong>Ultimo aggiornamento:</strong> 2019-12-04</p>
+<h2 is-upgraded><strong>Cosa imparerai</strong></h2>
+<ul>
+<li>Dividere il codice in più file</li>
+<li>Come gestire eventi asincroni</li>
+<li>Come ottenere il codice identificativo di un dispositivo</li>
+<li>Come effettuare una richiesta HTTP</li>
+<li>Come gestire gli errori di una richiesta HTTP</li>
+</ul>
+<h2 is-upgraded><strong>Cosa implementerai</strong></h2>
+<p>Realizzerai una pagina che mostrerà il codice identificativo del tuo dispositivo e che effettuerà una richiesta HTTP ad una REST API per poi mostrare il risultato a schermo. La richiesta HTTP sarà lanciata da un Floating Acion Button.</p>
+<p>La gif animata seguente mostra come apparirà la pagina alla fine:</p>
+<p class="image-container"><img style="width: 353.49px" src="img/4ddd74d1a3b7acc7.gif"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Punto di partenza" duration="0">
+        <p>Questo codelab presuppone il completamento di entrambe le due parti del codelab <strong>Write Your First Flutter App</strong></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Aggiungi una nuova pagina" duration="5">
+        <p>In questo step aggiungerai una nuova pagina all&#39;app. Alla fine di questa sezione avrai una seconda pagina in cui poter navigare.</p>
+<p>Hai libera scelta su come raggiungere questa nuova schermata, qui di seguito verrà aggiunto un nuovo action button alla AppBar.</p>
+<h2 is-upgraded><strong>Aggiungi un nuovo action button alla AppBar</strong></h2>
+<pre><code>@override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(&#39;Startup Name Generator&#39;),
+        actions: &lt;Widget&gt;[
+          IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
+          // Aggiungi qui
+          IconButton(
+              icon: Icon(Icons.card_giftcard), onPressed: null),
+          //
+        ],
+      ),
+      body: _buildSuggestions(),
+    );
+  }</code></pre>
+<p>Dovresti ottenere un risultato come questo:</p>
+<p class="image-container"><img style="width: 624.00px" src="img/c08e61889ece29fe.png"></p>
+<aside class="special"><p><strong>Nota:</strong> L&#39;icona è di colore grigio chiaro perché non hai passato alcuna funzione al metodo <code>onPressed</code></p>
+</aside>
+<h2 is-upgraded><strong>Crea una nuova pagina</strong></h2>
+<p>Dato che dovrai salvare e mostrare alcune informazioni a schermo, occorre qualcosa per poter gestire lo stato.</p>
+<p>Questa volta creeremo un nuovo file in cui inseriremo il codice relativo alla nuova pagina.</p>
+<p>Su Android Studio premi con il tasto destro sulla cartella <code>lib</code> vai su <strong>Nuovo</strong> e scegli <strong>File Dart</strong>, crea quindi un nuovo file chiamato <code>extract_gift</code>.</p>
+<p>In questo modo dovrai avere il file <code>extract_gift.dart</code> nella cartella <code>lib</code> allo stesso livello del file <code>main.dart</code>.</p>
+<p class="image-container"><img style="width: 400.00px" src="img/405a306abe5fc5f0.png"></p>
+<p>All&#39;interno nel nuovo file <code>extract_gift.dart</code> crea quindi un nuovo <a href="https://docs.flutter.io/flutter/widgets/StatefulWidget-class.html" target="_blank">Stateful Widget</a> e importa le librerie necessarie.</p>
+<pre><code>import &#39;package:flutter/material.dart&#39;;
+
+class ExtractGiftScreen extends StatefulWidget {
+  @override
+  _ExtractGiftScreenState createState() =&gt; _ExtractGiftScreenState();
+}
+
+class _ExtractGiftScreenState extends State&lt;ExtractGiftScreen&gt; {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}</code></pre>
+<p>Aggiungi uno Scaffold con una AppBar al posto del Container vuoto:</p>
+<pre><code>@override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(&#34;Flutter Interact GDG Cloud Roma&#34;),
+      ),
+    );
+  }</code></pre>
+<h2 is-upgraded><strong>Collega la nuova pagina al resto dell&#39;app</strong></h2>
+<p>Adesso che hai la nuova pagina, collegala al resto dell&#39;app utilizzando l&#39;action button che hai aggiunto in precedenza.</p>
+<p>Aggiungi un metodo <code>_goToExtraction()</code>alla classe RandomWordsState:</p>
+<pre><code>void _goToExtraction() {
+    
+  }</code></pre>
+<p>E passalo come metodo <code>onPressed</code> al nuovo <code>IconButton</code> appena creato:</p>
+<pre><code>actions: &lt;Widget&gt;[
+          IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
+          IconButton(
+              icon: Icon(Icons.card_giftcard), onPressed: _goToExtraction), // ← Aggiorna qui
+        ],</code></pre>
+<p>Usa il metodo <code>_goToExtraction()</code> per navigare verso la nuova pagina:</p>
+<pre><code>void _goToExtraction() {
+    Navigator.of(context).push(
+      MaterialPageRoute&lt;void&gt;(
+        builder: (BuildContext context) {
+          return ExtractGiftScreen();
+        },
+      ),
+    );
+  }</code></pre>
+<aside class="special"><p><strong>Nota:</strong> Dovrai importare il file <code>extract_gift.dart</code> da te creato. Non ci sarà alcuna differenza tra l&#39;importare una classe da una libreria di terze parti e l&#39;importare una classe da te creata in un tuo file separato.</p>
+</aside>
+<p>Se hai fatto tutto correttamente, dovrai avere un risultato come questo:</p>
+<p class="image-container"><img style="width: 427.00px" src="img/543b4da8fe08a725.gif"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Mostra l&#39;ID del dispositivo" duration="3">
+        <p>In questo step vedrai come ottenere il codice identificativo univoco del tuo dispositivo. Vedrai inoltre come gestire dati asincroni.</p>
+<p>Alla fine di questa sezione avrai l&#39;ID del tuo dispositivo mostrato sullo schermo dell&#39;app.</p>
+<h2 is-upgraded><strong>Ottieni l&#39;ID del tuo dispositivo</strong></h2>
+<p>Aggiungi al tuo <code>pubspec.yaml</code> il package <code>device_id</code>:</p>
+<pre><code>dependencies:
+  flutter:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.3
+  english_words: ^3.1.5
+  device_id: ^0.2.0 // ← Aggiungi qui</code></pre>
+<p>La libreria <code>device_id</code> permette di ottenere l&#39;ID del disposito tramite il metodo <code>DeviceId.getID</code>. Questo metodo è asincrono, e dovrai quindi gestirlo diversamente da come sei abiutato a fare.</p>
+<aside class="special"><p><strong>Nota:</strong> Un metodo asincrono non ritornerà immediatamente un valore nel momento in cui viene chiamato, ma lo farà in <strong>futuro</strong>. Questo è il motivo per cui il team di Dart ha deciso di chiamare <code>Future</code> il valore di ritorno delle funzioni asincrone.</p>
+</aside>
+<h3 is-upgraded><strong>Futures e funzioni asincrone</strong></h3>
+<p>Il metodo <code>DeviceId.getID</code> è definito come:</p>
+<pre><code>Future&lt;String&gt; get getID() async {}</code></pre>
+<p>Questo significa che una volta chiamato non avrai una stringa da poter visualizzare a schermo, bensì questo oggetto di tipo <strong>Future</strong>. A te interessa il contenuto di questo Future, che è la stringa contenente l&#39;ID del tuo dispositivo.</p>
+<p>Uno dei modi per estrapolare agevolmente il contenuto di un Future per visualizzarlo a schermo è utilizzare un <code>FutureBuilder</code>, un widget fornito dalla libreria standard di Flutter.</p>
+<p>Aggiungi al <code>body</code> dello Scaffold del Widget <code>_ExtractGiftScreenState</code> un <code>FutureBuilder</code> per gestire il Future di <code>DeviceId.getID</code>, che ritorni un Widget <code>Text</code> con l&#39;ID del tuo dispositivo:</p>
+<pre><code>class _ExtractGiftScreenState extends State&lt;ExtractGiftScreen&gt; {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(&#34;Flutter Interact GDG Cloud Roma&#34;),
+      ),
+      // Aggiungi da qui
+      body: FutureBuilder&lt;String&gt;(
+        future: DeviceId.getID,
+        builder: (
+          BuildContext context,
+          AsyncSnapshot&lt;String&gt; snapshot,
+        ) {
+          return Text(snapshot.data);
+        },
+      ),
+      // A qui
+    );
+  }
+}</code></pre>
+<aside class="special"><p><strong>Nota:</strong> Al FutureBuilder servono due parametri:</p>
+<ul>
+<li>Il Future da gestire</li>
+<li>Un Builder che descrive il layout del widget da costruire</li>
+</ul>
+<p>Lo Snapshot è dove il contenuto del Future viene riversato una volta arrivato, in particolare in <code>snapshot.data</code>. Il tipo del FutureBuilder indica il tipo di dato che contiene il Future, ed è lo stesso tipo che riceve l&#39;AsyncSnapshot (in questo caso String).</p>
+</aside>
+<p>Eseguendo adesso l&#39;applicazione dovresti vedere l&#39;ID del tuo dispositivo in alto sullo schermo:</p>
+<p class="image-container"><img style="width: 363.26px" src="img/1a900a86e1bb9d92.png"></p>
+<h3 is-upgraded><strong>Gestione stati dati asincroni</strong></h3>
+<p>A prima occhiata tutto sembra essere andato per il meglio, ma se guardi meglio le cose non stanno così.</p>
+<p>Dando un&#39;occhiata alla console di esecuzione su Android Studio potrai vedere un messaggio di errore come questo subito dopo aver navigato verso la nuova pagina appena creata:</p>
+<pre><code>════════ Exception caught by widgets library ═══════════════════════════════════════════════════════
+The following assertion was thrown building FutureBuilder&lt;String&gt;(dirty, state: _FutureBuilderState&lt;String&gt;#d39c9):
+A non-null String must be provided to a Text widget.
+&#39;package:flutter/src/widgets/text.dart&#39;:
+Failed assertion: line 269 pos 10: &#39;data != null&#39;</code></pre>
+<p>Questo messaggio indica che è stata lanciata un&#39;eccezione dalla nostra app, in particolare ci dice che non è possibile passare un valore null ad un widget Text.</p>
+<p>Se guardi cosa hai passato al widget Text come parametro vedrai che è <code>snapshot.data</code>. Ciò significa che inizialmente, prima di contenere il testo dell&#39;ID del tuo dispositivo, questo ha <code>null</code> come valore.</p>
+<p>Il motivo di questo comportamento è che <code>AsyncSnapshot</code> può assumere diversi stati, dipendenti dallo stato in cui si trova il Future che dovrebbe popolarlo.</p>
+<p>Per evitare questa eccezione devi gestire agli stati dello snapshot.</p>
+<p>In primis controlla che lo snapshot abbia effettivamente un dato:</p>
+<pre><code>FutureBuilder&lt;String&gt;(
+              future: DeviceId.getID,
+              builder: (
+                BuildContext context,
+                AsyncSnapshot&lt;String&gt; snapshot,
+              ) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data);
+                }
+
+                return Container();
+              },
+            ),</code></pre>
+<p>In questo modo nel caso in cui lo snapshot non contenga nessun dato, verrà mostrato un Container vuoto, altrimenti verrà mostrato il testo correttamente.</p>
+<p>Se esegui l&#39;app adesso vedrai che non verrà mostrata più alcun messaggio di eccezione.</p>
+<p>Per gestire le cose in maniera più accurata, gestisci il caso in cui lo snapshot contenga un errore:</p>
+<pre><code>FutureBuilder&lt;String&gt;(
+              future: DeviceId.getID,
+              builder: (
+                BuildContext context,
+                AsyncSnapshot&lt;String&gt; snapshot,
+              ) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data);
+                }
+
+                if (snapshot.hasError) {
+                  return Text(
+                    snapshot.error.toString(),
+                    style: TextStyle(color: Colors.red),
+                  );
+                }
+                return Container();
+              },
+            ),</code></pre>
+<p>Così facendo, nel caso in cui lo snapshot contenga un errore, verrà mostrato un messaggio di errore di colore rosso.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Prepara l&#39;estrazione" duration="10">
+        <p>In questo step preparerai il layout per della schermata per effettuare l&#39;estrazione e vedrai come effettuare una richiesta HTTP e gestirne gli errori. </p>
+<p>Alla fine di questa sezione sarai in grado di effettuare una richiesta HTTP alla REST API del server di estrazione.</p>
+<h2 is-upgraded><strong>Sistema il layout</strong></h2>
+<p>Come potrai notare non c&#39;è alcun tipo di layout particolare attualmente nella schermata. Implementane uno veramente semplice per separare meglio l&#39;ID del dispositivo con il numero estratto.</p>
+<p>Per prima cosa centra il widget che contiene l&#39;ID del tuo dispositivo:</p>
+<pre><code>@override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(&#34;Flutter Interact GDG Cloud Roma&#34;),
+      ),
+      body: Center( // ← Aggiungi questo widget
+        child: FutureBuilder&lt;String&gt;(
+          future: DeviceId.getID,
+          builder: (
+            BuildContext context,
+            AsyncSnapshot&lt;String&gt; snapshot,
+          ) {
+            if (snapshot.hasData) {
+                  return Text(snapshot.data);
+                }
+
+            if (snapshot.hasError) {
+              return Text(
+                snapshot.error.toString(),
+                style: TextStyle(color: Colors.red),
+              );
+            }
+            return Container();
+          },
+        ),
+      ),
+    );
+  }</code></pre>
+<p>In modo da ottenere questo risultato:</p>
+<p class="image-container"><img style="width: 336.07px" src="img/afe17e093f42431.png"></p>
+<p>Inoltre, in vista del widget che conterrà il numero estratto, racchiudiamo il widget dell&#39;ID in una Column:</p>
+<pre><code>@override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(&#34;Flutter Interact GDG Cloud Roma&#34;),
+      ),
+      body: Center(
+        child: Column( // ← Aggiungi questo widget
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: &lt;Widget&gt;[
+            FutureBuilder&lt;String&gt;(
+              future: DeviceId.getID,
+              builder: (
+                BuildContext context,
+                AsyncSnapshot&lt;String&gt; snapshot,
+              ) {
+
+                if (snapshot.hasData) {
+                  return Text(snapshot.data);
+                }
+
+                if (snapshot.hasError) {
+                  return Text(
+                    snapshot.error.toString(),
+                    style: TextStyle(color: Colors.red),
+                  );
+                }
+                return Container();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }</code></pre>
+<aside class="special"><p><strong>Nota:</strong> il parametro <code>mainAxisAlignment</code> gestisce la spaziatura tra gli elementi della colonna. Il valore <code>MainAxisAlignment.spaceEvenly</code> aggiunge una spaziatura equa sia sopra che sotto che in mezzo a tutti gli elementi della colonna.</p>
+</aside>
+<p>Aggiungi un <a href="https://api.flutter.dev/flutter/material/FloatingActionButton-class.html" target="_blank">Floating Action Button</a> allo Scaffold del <code>_ExtractGiftScreenState</code>:</p>
+<pre><code>class _ExtractGiftScreenState extends State&lt;ExtractGiftScreen&gt; {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(&#34;Flutter Interact GDG Cloud Roma&#34;),
+      ),
+      // Aggiungi da qui
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.cloud_upload),
+        onPressed: null,
+      ),
+      // a qui</code></pre>
+<p>Così facendo dovresti avere un risultato come questo:</p>
+<p class="image-container"><img style="width: 336.07px" src="img/1fa094a6d02e7da6.png"></p>
+<h2 is-upgraded><strong>Interagisci con la REST API</strong></h2>
+<p>Aggiungi il package <code>http</code> al file <code>pubspec.yaml</code></p>
+<pre><code>dependencies:
+  flutter:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^0.1.3
+  english_words: ^3.1.5
+  device_id: ^0.2.0
+  http: ^0.12.0+2</code></pre>
+<p>Per comunicare con la API ci servirà il metodo <code>get</code> del package <code>http</code>. Anche questo metodo è asincrono, e ritorna un oggetto di tipo <code>Future&lt;http.Response&gt;</code>, dove l&#39;oggetto <code>Response</code> rappresenta la risposta alla richiesta HTTP.</p>
+<p>Importa manualmente il package http nel file <code>lib/extract_gift.dart</code>:</p>
+<pre><code>import &#39;package:flutter/material.dart&#39;;
+import &#39;package:http/http.dart&#39; as http; // ← Aggiungi qui
+
+class ExtractGiftScreen extends StatefulWidget {
+  @override
+  _ExtractGiftScreenState createState() =&gt; _ExtractGiftScreenState();
+}</code></pre>
+<p>Aggiungi un metodo <code>_makeRequest()</code> alla classe <code>_ExtractGiftScreenState</code> dove implementare l&#39;invio della richiesta:</p>
+<pre><code>class _ExtractGiftScreenState extends State&lt;ExtractGiftScreen&gt; {
+
+  Future&lt;void&gt; _makeRequest() async {} // ← Aggiungi qui</code></pre>
+<p>Esegui la richiesta GET HTTP all&#39;interno di questo metodo, e gestisci il caso in cui si verifichi un errore. Per adesso limitati a stampare il risultato nella console:</p>
+<pre><code>Future&lt;void&gt; _makeRequest() async {
+    final String url =
+        &#34;https://flutter-interact-gdgcloud-roma.web.app/numbers/extract&#34;;
+
+    try {
+      final http.Response response = await http.get(url);
+      print(response.body);
+    } catch (e) {
+      print(e.toString());
+    }
+  }</code></pre>
+<aside class="special"><p><strong>Nota:</strong> L&#39;url è un end-point di test, non verrà fatta alcuna estrazione fino a questo momento. Puoi provare tranquillamente tutte le volte che vuoi.</p>
+</aside>
+<p>Aggiungi un metodo <code>_onPressed()</code> alla classe <code>_ExtractGiftScreenState</code> in cui chiami la funzione <code>_makeRequest()</code>:</p>
+<pre><code>void _onPressed() async {
+    _makeRequest();
+  }</code></pre>
+<p>Passa il metodo <code>_onPressed()</code> come parametro <code>onPressed</code> del FloatingActionButton:</p>
+<pre><code>floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.cloud_upload),
+        onPressed: _onPressed, // ← Aggiungi qui
+      ),</code></pre>
+<p>Riesegui adesso l&#39;applicazione e controlla che nella console venga mostrato un messaggio di <code>OK</code> come questo:</p>
+<pre><code>Performing hot restart...
+Syncing files to device iPhone 11 Pro Max...
+Restarted application in 1,542ms.
+flutter: OK // ←</code></pre>
+<h2 is-upgraded><strong>Mostra la risposta della API a schermo</strong></h2>
+<p>Invia adesso la risposta della richiesta HTTP al widget tree.</p>
+<p>Cambia il tipo di ritorno del metodo <code>_makeRequest():</code></p>
+<pre><code>Future&lt;String&gt; _makeRequest() async { // ← cambia void in String
+    final String url =
+        &#34;https://flutter-interact-gdgcloud-roma.web.app/numbers/extract&#34;;
+
+    try {
+      final http.Response response = await http.get(url);
+      print(response.body);
+    } catch (e) {
+      print(e.toString());
+    }
+</code></pre>
+<p>Ritorna la risposta della richiesta o il messaggio di errore:</p>
+<pre><code>Future&lt;String&gt; _makeRequest() async {
+    final String url =
+        &#34;https://flutter-interact-gdgcloud-roma.web.app/numbers/extract&#34;;
+
+    try {
+      final http.Response response = await http.get(url);
+      return response.body;
+      
+    } catch (e) {
+      return e.toString();
+    }
+  }</code></pre>
+<p>Salva il Future contenente il messaggio di risposta come variabile di stato della classe <code>_ExtractGiftScreenState</code>:</p>
+<pre><code>class _ExtractGiftScreenState extends State&lt;ExtractGiftScreen&gt; {
+  Future&lt;String&gt; _responseMessageFuture;</code></pre>
+<pre><code>void _onPressed() async {
+    setState(() {
+      _responseMessageFuture = _makeRequest();
+    });
+  }</code></pre>
+<p>Aggiungi un secondo FutureBuilder alla Column nella Widget <code>_ExtractGiftScreenState:</code></p>
+<pre><code>child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: &lt;Widget&gt;[
+            FutureBuilder&lt;String&gt;(
+              future: DeviceId.getID,
+              builder: (
+                BuildContext context,
+                AsyncSnapshot&lt;String&gt; snapshot,
+              ) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data);
+                }
+
+                if (snapshot.hasError) {
+                  return Text(
+                    snapshot.error.toString(),
+                    style: TextStyle(color: Colors.red),
+                  );
+                }
+                return Container();
+              },
+            ), 
+            FutureBuilder() // ← Aggiungi qui,
+          ],
+        ),</code></pre>
+<p>Usa il <code>_responseMessageFuture</code> appena creato come future:</p>
+<pre><code>FutureBuilder(future: _responseMessageFuture),</code></pre>
+<p>Copia il builder del primo FutureBuilder nel secondo:</p>
+<pre><code>FutureBuilder(
+              future: _responseMessageFuture,
+              builder: (
+                BuildContext context,
+                AsyncSnapshot&lt;String&gt; snapshot,
+              ) {
+                if (snapshot.hasData) {
+                  return Text(
+                    snapshot.data,
+                    style: Theme.of(context).textTheme.display1, // ← Modifica qui
+                  );
+                }
+
+                if (snapshot.hasError) {
+                  return Text(
+                    snapshot.error.toString(),
+                    style: TextStyle(color: Colors.red),
+                  );
+                }
+                return Container();
+              },
+            ),</code></pre>
+<aside class="special"><p><strong>Nota:</strong> La dimensione del testo della risposta è stata aumentata per evidenziarlo maggiormente rispetto all&#39;ID del dispositivo.</p>
+</aside>
+<p>Esegui nuovamente l&#39;app e verifica che venga mostrato il messaggio di <code>OK</code> a schermo, dopo aver atteso l&#39;arrivo della risposta HTTP. Dovresti vedere un comportamento del genere:</p>
+<p class="image-container"><img style="width: 271.83px" src="img/f381277f26c4504e.gif"></p>
+<p>Prima di premere il FloatingActionButton la pagina è un po&#39; troppo vuota. È bene mostrare un testo che anticipa dove verrà mostrato il numero estratto.</p>
+<p>Aggiungi un testo placeholder:</p>
+<pre><code>FutureBuilder(
+              future: _responseMessageFuture,
+              initialData: &#34;Pronto per estrarre&#34;, // ← Aggiungi qui
+              builder: (
+                BuildContext context,
+                AsyncSnapshot&lt;String&gt; snapshot,
+              ) {</code></pre>
+<p>Aggiorna l&#39;app e dovresti vedere un risultato del genere:</p>
+<p class="image-container"><img style="width: 290.57px" src="img/2fb5a110591d8509.png"></p>
+<p>L&#39;arrivo del messaggio di risposta potrebbe essere più o meno lungo, in base alla qualità della connessione ad internet del dispositivo. Attualmente non c&#39;è nessun indizio che indichi che l&#39;applicazione sia in attesa di una risposta. L&#39;informazione sullo stato della richiesta è contenuto nell&#39;oggetto AsyncSnapshot.</p>
+<p>Usa lo stato dell&#39;AsyncSnapshot per mostrare un indicatore circolare durante l&#39;attesa della risposta:</p>
+<pre><code>FutureBuilder(
+              future: _responseMessageFuture,
+              initialData: &#34;Pronto per estrarre&#34;,
+              builder: (
+                BuildContext context,
+                AsyncSnapshot&lt;String&gt; snapshot,
+              ) {
+                // Aggiungi da qui
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                // a qui
+                
+                if (snapshot.hasData) {
+                  return Text(snapshot.data);
+                }
+
+                if (snapshot.hasError) {
+                  return Text(
+                    snapshot.error.toString(),
+                    style: TextStyle(color: Colors.red),
+                  );
+                }
+                return Container();
+              },
+            ),</code></pre>
+<p>Esegui nuovamente l&#39;applicazione e dovresti vedere un risultato come questo:</p>
+<p class="image-container"><img style="width: 316.90px" src="img/46fdfb80e2931d46.gif"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Effettua l&#39;estrazione" duration="3">
+        <p>In questo step effettuerai la vera estrazione del premio. Metterai insieme quello che hai implementato in precedenza per costruire la vera richiesta di estrazione.</p>
+<p>Alla fine di questa sezione avrai un numero da mostrare allo staff per ricevere il tuo regalo.</p>
+<h2 is-upgraded><strong>Salva l&#39;ID del dispositivo nello stato</strong></h2>
+<p>Salva il Future dell&#39;ID del dispositivo come variabile di stato della classe <code>_ExtractGiftScreenState</code>:</p>
+<pre><code>class _ExtractGiftScreenState extends State&lt;ExtractGiftScreen&gt; {
+  Future&lt;String&gt; _deviceIDFuture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _deviceIDFuture = DeviceId.getID;
+  }</code></pre>
+<p>Usa questo Future nel primo FutureBuilder:</p>
+<pre><code>body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: &lt;Widget&gt;[
+            FutureBuilder&lt;String&gt;(
+              future: _deviceIDFuture, // ← Aggiorna qui
+              builder: (
+                BuildContext context,
+                AsyncSnapshot&lt;String&gt; snapshot,
+              ) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data);
+                }
+
+                if (snapshot.hasError) {
+                  return Text(
+                    snapshot.error.toString(),
+                    style: TextStyle(color: Colors.red),
+                  );
+                }
+                return Container();
+              },
+            ),</code></pre>
+<p>Estrai l&#39;ID del dispositivo all&#39;interno del metodo <code>_makeRequest()</code>. Per farlo ti serve un metodo diverso da quello che hai già visto con i FutureBuilder. </p>
+<p>Usa il costrutto <code>await</code> per estrarre il contenuto del Future:</p>
+<pre><code> Future&lt;String&gt; _makeRequest() async {
+    String deviceID = await _deviceIDFuture; // ← Aggiungi qui</code></pre>
+<aside class="special"><p><strong>Nota:</strong> La keyword <code>await</code> mette in pausa l&#39;esecuzione del codice fino a quando il Future non emette un valore. Una volta emesso, il suo contenuto viene estratto dal Future e viene ritornato senza di esso.</p>
+</aside>
+<p>Aggiorna l&#39;url della richiesta inserendo l&#39;ID del tuo dispositivo alla fine:</p>
+<pre><code>Future&lt;String&gt; _makeRequest() async {
+    String deviceID = await _deviceIDFuture;
+
+    final String url =
+        &#34;https://flutter-interact-gdgcloud-roma.web.app/numbers/extract/$deviceID&#34;; // ← Modifica qui
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Congratulazioni" duration="0">
+        <h2 is-upgraded><strong>Riavvia l&#39;applicazione ed estrai il tuo numero!</strong></h2>
+<p>Congratulazioni hai completato con successo il Codelab nella sua totalità.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/codelab-elements/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/prettify.js"></script>
+  <script src="https://storage.googleapis.com/codelab-elements/codelab-elements.js"></script>
+
+</body>
+</html>
