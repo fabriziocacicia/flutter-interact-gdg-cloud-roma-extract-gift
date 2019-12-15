@@ -186,8 +186,10 @@ class _ExtractGiftScreenState extends State&lt;ExtractGiftScreen&gt; {
 </ul>
 <p>Lo Snapshot è dove il contenuto del Future viene riversato una volta arrivato, in particolare in <code>snapshot.data</code>. Il tipo del FutureBuilder indica il tipo di dato che contiene il Future, ed è lo stesso tipo che riceve l&#39;AsyncSnapshot (in questo caso String).</p>
 </aside>
-<p>Eseguendo adesso l&#39;applicazione dovresti vedere l&#39;ID del tuo dispositivo in alto sullo schermo:</p>
+<p>Chiudi del tutto e riapri l&#39;applicazione. Adesso dovresti vedere l&#39;ID del tuo dispositivo in alto sullo schermo:</p>
 <p class="image-container"><img style="width: 363.26px" src="img/1a900a86e1bb9d92.png"></p>
+<aside class="warning"><p><strong>Attenzione:</strong> Non puoi usare Hot Reload per applicare questa modifica. Quando si aggiungono dei nuovi pacchetti al pubspec.yaml o quando si fanno grosse modifiche all&#39;applicazione è necessario un riavvio completo dell&#39;applicazione.</p>
+</aside>
 <h3 is-upgraded><strong>Gestione stati dati asincroni</strong></h3>
 <p>A prima occhiata tutto sembra essere andato per il meglio, ma se guardi meglio le cose non stanno così.</p>
 <p>Dando un&#39;occhiata alla console di esecuzione su Android Studio potrai vedere un messaggio di errore come questo subito dopo aver navigato verso la nuova pagina appena creata:</p>
